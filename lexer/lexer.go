@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"monkey/token"
+	"strings"
 )
 
 type Lexer struct {
@@ -110,12 +111,22 @@ func (l *Lexer) skipWhitespace() {
 }
 
 func (l *Lexer) readNumber() string {
-	position := l.position
-	for isDigit(l.ch) {
+	str := ""
+	accept := "0123456789"
+	if l.ch == '0' && l.peekChar() == 'x' {
+		accept = "0x123456789abcdefABCDEF"
+	}
+
+	if l.ch == '0' && l.peekChar() == 'b' {
+		accept = "b01"
+	}
+	for strings.Contains(accept, string(l.ch)) {
+		str += string(l.ch)
 		l.readChar()
 	}
-	return l.input[position:l.position]
+	return str
 }
+
 func isDigit(ch byte) bool {
 	return '0' <= ch && ch <= '9'
 }
