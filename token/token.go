@@ -28,6 +28,7 @@ const (
 	RETURN    = "RETURN"
 	EQ        = "=="
 	NOTEq     = "!="
+	STRING = "STRING"
 )
 
 type Type string
