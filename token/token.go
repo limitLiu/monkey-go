@@ -19,8 +19,8 @@ const (
 	RPAREN    = ")"
 	LBRACE    = "{"
 	RBRACE    = "}"
-	LBRACKET    = "["
-	RBRACKET    = "]"
+	LBRACKET  = "["
+	RBRACKET  = "]"
 	FUNCTION  = "FUNCTION"
 	LET       = "LET"
 	TRUE      = "TRUE"
@@ -30,7 +30,8 @@ const (
 	RETURN    = "RETURN"
 	EQ        = "=="
 	NOTEq     = "!="
-	STRING = "STRING"
+	STRING    = "STRING"
+	COLON     = ":"
 )
 
 type Type string

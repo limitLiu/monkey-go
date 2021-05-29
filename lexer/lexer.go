@@ -76,12 +76,14 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.COMMA, l.ch)
 	case ';':
 		tok = newToken(token.SEMICOLON, l.ch)
-	case 0:
-		tok.Literal = ""
-		tok.Type = token.EOF
+	case ':':
+		tok = newToken(token.COLON, l.ch)
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
+	case 0:
+		tok.Literal = ""
+		tok.Type = token.EOF
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
