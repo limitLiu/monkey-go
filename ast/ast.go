@@ -200,20 +200,20 @@ type Statement interface {
 	statementNode()
 }
 
-// IfExpress start
-type IfExpress struct {
+// IfExpression start
+type IfExpression struct {
 	Token       token.Token
 	Condition   Expression
 	Consequence *BlockStatement
 	Alternative *BlockStatement
 }
 
-func (ie *IfExpress) expressionNode() {}
-func (ie *IfExpress) TokenLiteral() string {
+func (ie *IfExpression) expressionNode() {}
+func (ie *IfExpression) TokenLiteral() string {
 	return ie.Token.Literal
 }
 
-func (ie *IfExpress) String() string {
+func (ie *IfExpression) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("if")
@@ -240,7 +240,7 @@ func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
 func (fl *FunctionLiteral) String() string {
 	var out bytes.Buffer
 
-	params := []string{}
+	var params []string
 	for _, p := range fl.Parameters {
 		params = append(params, p.String())
 	}
@@ -266,7 +266,7 @@ func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
 
 func (ce *CallExpression) String() string {
 	var out bytes.Buffer
-	args := []string{}
+	var args []string
 
 	for _, a := range ce.Arguments {
 		args = append(args, a.String())
@@ -307,7 +307,7 @@ func (al *ArrayLiteral) TokenLiteral() string {
 }
 func (al *ArrayLiteral) String() string {
 	var out bytes.Buffer
-	elements := []string{}
+	var elements []string
 	for _, el := range al.Elements {
 		elements = append(elements, el.String())
 	}
@@ -356,7 +356,7 @@ func (hl *HashLiteral) TokenLiteral() string {
 func (hl *HashLiteral) String() string {
 	var out bytes.Buffer
 
-	pairs := []string{}
+	var pairs []string
 	for k, v := range hl.Pairs {
 		pairs = append(pairs, k.String()+":"+v.String())
 	}

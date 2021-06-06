@@ -11,7 +11,7 @@ import (
 )
 
 const PROMPT = ">> "
-const MONKEY_FACE = `            __,__
+const MonkeyFace = `            __,__
    .--.  .-"     "-.  .--.
   / .. \/  .-. .-.  \/ .. \
  | |  '|  /   Y   \  |'  | |
@@ -45,17 +45,35 @@ func Start(in io.Reader, out io.Writer) {
 
 		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
-			io.WriteString(out, evaluated.Inspect())
-			io.WriteString(out, "\n")
+			_, err := io.WriteString(out, evaluated.Inspect())
+			if err != nil {
+				return
+			}
+			_, e := io.WriteString(out, "\n")
+			if e != nil {
+				return
+			}
 		}
 	}
 }
 
 func printParserErrors(out io.Writer, errors []string) {
-	io.WriteString(out, MONKEY_FACE)
-	io.WriteString(out, "Woops! We ran into some monkey business here!\n")
-	io.WriteString(out, "parser errors:\n")
+	_, err := io.WriteString(out, MonkeyFace)
+	if err != nil {
+		return
+	}
+	_, e := io.WriteString(out, "Whoops! We ran into some monkey business here!\n")
+	if e != nil {
+		return
+	}
+	_, er := io.WriteString(out, "parser errors:\n")
+	if er != nil {
+		return
+	}
 	for _, msg := range errors {
-		io.WriteString(out, "\t"+msg+"\n")
+		_, err := io.WriteString(out, "\t"+msg+"\n")
+		if err != nil {
+			return
+		}
 	}
 }

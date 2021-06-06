@@ -152,18 +152,18 @@ func TestIntegerLiteralExpression(t *testing.T) {
 }
 
 func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
-	integ, ok := il.(*ast.IntegerLiteral)
+	integer, ok := il.(*ast.IntegerLiteral)
 	if !ok {
 		t.Errorf("il not *ast.IntegerLiteral. got = %T", il)
 		return false
 	}
 
-	if integ.Value != value {
-		t.Errorf("integ.Value not %d. got = %d", value, integ.Value)
+	if integer.Value != value {
+		t.Errorf("integer.Value not %d. got = %d", value, integer.Value)
 		return false
 	}
-	if integ.TokenLiteral() != fmt.Sprintf("%d", value) {
-		t.Errorf("integ.TokenLiteral not %d. got = %s", value, integ.TokenLiteral())
+	if integer.TokenLiteral() != fmt.Sprintf("%d", value) {
+		t.Errorf("integer.TokenLiteral not %d. got = %s", value, integer.TokenLiteral())
 		return false
 	}
 	return true
@@ -383,7 +383,7 @@ func TestIfExpression(t *testing.T) {
 		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got = %T", program.Statements[0])
 	}
 
-	exp, ok := stmt.Expression.(*ast.IfExpress)
+	exp, ok := stmt.Expression.(*ast.IfExpression)
 	if !ok {
 		t.Fatalf("stmt.Expression is not ast.IfExpress. got = %T", stmt.Expression)
 	}
@@ -424,7 +424,7 @@ func TestIfElseExpression(t *testing.T) {
 		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got = %T", program.Statements[0])
 	}
 
-	exp, ok := stmt.Expression.(*ast.IfExpress)
+	exp, ok := stmt.Expression.(*ast.IfExpression)
 	if !ok {
 		t.Fatalf("stmt.Expression is not ast.IfExpress. got = %T", stmt.Expression)
 	}
@@ -674,7 +674,7 @@ func TestParsingHashLiteralsWithExpressions(t *testing.T) {
 	if len(hash.Pairs) != 3 {
 		t.Errorf("hash.Pairs has wrong length. got = %d", len(hash.Pairs))
 	}
-	tests := map[string]func(ast.Expression) {
+	tests := map[string]func(ast.Expression){
 		"one": func(e ast.Expression) {
 			testInfixExpression(t, e, 0, "+", 1)
 		},

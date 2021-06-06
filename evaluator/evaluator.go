@@ -40,7 +40,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalInfixExpression(node.Operator, left, right)
 	case *ast.BlockStatement:
 		return evalBlockStatement(node, env)
-	case *ast.IfExpress:
+	case *ast.IfExpression:
 		return evalIfExpression(node, env)
 	case *ast.ReturnStatement:
 		val := Eval(node.ReturnValue, env)
@@ -62,6 +62,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		body := node.Body
 		return &object.Function{Parameters: params, Env: env, Body: body}
 	case *ast.CallExpression:
+		if node.Function.TokenLiteral() == "quote" {
+			return quote(node.Arguments[0], env)
+		}
 		function := Eval(node.Function, env)
 		if isError(function) {
 			return function
@@ -120,9 +123,9 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 
 func evalIndexExpression(left, index object.Object) object.Object {
 	switch {
-	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
+	case left.Type() == object.ArrayObj && index.Type() == object.IntegerObj:
 		return evalArrayIndexExpression(left, index)
-	case left.Type() == object.HASH_OBJ:
+	case left.Type() == object.HashObj:
 		return evalHashIndexExpression(left, index)
 	default:
 		return newError("index operator not supported: %s", left.Type())
@@ -218,7 +221,7 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 		result = Eval(statement, env)
 		if result != nil {
 			rt := result.Type()
-			if rt == object.RETURN_VALUE_OBJ || rt == object.ERROR_OBJ {
+			if rt == object.ReturnValueObj || rt == object.ErrorObj {
 				return result
 			}
 		}
@@ -267,7 +270,7 @@ func evalBangOperatorExpression(input object.Object) object.Object {
 }
 
 func evalMinusOperatorExpression(right object.Object) object.Object {
-	if right.Type() != object.INTEGER_OBJ {
+	if right.Type() != object.IntegerObj {
 		return newError("unknown operator: -%s", right.Type())
 	}
 	value := right.(*object.Integer).Value
@@ -275,7 +278,7 @@ func evalMinusOperatorExpression(right object.Object) object.Object {
 }
 
 func evalPlusOperatorExpression(right object.Object) object.Object {
-	if right.Type() != object.INTEGER_OBJ {
+	if right.Type() != object.IntegerObj {
 		return NULL
 	}
 	return right
@@ -283,7 +286,7 @@ func evalPlusOperatorExpression(right object.Object) object.Object {
 
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
-	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
+	case left.Type() == object.IntegerObj && right.Type() == object.IntegerObj:
 		return evalIntegerInfixExpression(operator, left, right)
 	case operator == "==":
 		return nativeBoolToBoolean(left == right)
@@ -291,7 +294,7 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 		return nativeBoolToBoolean(left != right)
 	case left.Type() != right.Type():
 		return newError("type mismatch: %s %s %s", left.Type(), operator, right.Type())
-	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
+	case left.Type() == object.StringObj && right.Type() == object.StringObj:
 		return evalStringInfixExpression(operator, left, right)
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
@@ -332,7 +335,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 	}
 }
 
-func evalIfExpression(ie *ast.IfExpress, env *object.Environment) object.Object {
+func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
 	condition := Eval(ie.Condition, env)
 	if isError(condition) {
 		return condition
@@ -365,7 +368,7 @@ func newError(format string, a ...interface{}) *object.Error {
 
 func isError(obj object.Object) bool {
 	if obj != nil {
-		return obj.Type() == object.ERROR_OBJ
+		return obj.Type() == object.ErrorObj
 	}
 	return false
 }

@@ -1,37 +1,37 @@
 package token
 
 const (
-	ILLEGAL   = "ILLEGAL"
+	Illegal   = "ILLEGAL"
 	EOF       = "EOF"
-	IDENT     = "IDENT"
-	INT       = "INT"
-	ASSIGN    = "="
-	PLUS      = "+"
-	MINUS     = "-"
-	BANG      = "!"
-	ASTERISK  = "*"
-	SLASH     = "/"
-	LT        = "<"
-	GT        = ">"
-	COMMA     = ","
-	SEMICOLON = ";"
-	LPAREN    = "("
-	RPAREN    = ")"
-	LBRACE    = "{"
-	RBRACE    = "}"
-	LBRACKET  = "["
-	RBRACKET  = "]"
-	FUNCTION  = "FUNCTION"
-	LET       = "LET"
-	TRUE      = "TRUE"
-	FALSE     = "FALSE"
-	IF        = "IF"
-	ELSE      = "ELSE"
-	RETURN    = "RETURN"
-	EQ        = "=="
-	NOTEq     = "!="
-	STRING    = "STRING"
-	COLON     = ":"
+	Ident     = "IDENT"
+	Int       = "INT"
+	Assign    = "="
+	Plus      = "+"
+	Minus     = "-"
+	Bang      = "!"
+	Asterisk  = "*"
+	Slash     = "/"
+	Lt        = "<"
+	Gt        = ">"
+	Comma     = ","
+	Semicolon = ";"
+	LParen    = "("
+	RParen    = ")"
+	LBrace    = "{"
+	RBrace    = "}"
+	LBracket  = "["
+	RBracket  = "]"
+	Function  = "FUNCTION"
+	Let       = "LET"
+	True      = "TRUE"
+	False     = "FALSE"
+	If        = "IF"
+	Else      = "ELSE"
+	Return    = "RETURN"
+	Eq        = "=="
+	NotEq     = "!="
+	String    = "STRING"
+	Colon     = ":"
 )
 
 type Type string
@@ -42,18 +42,18 @@ type Token struct {
 }
 
 var keywords = map[string]Type{
-	"fn":     FUNCTION,
-	"let":    LET,
-	"true":   TRUE,
-	"false":  FALSE,
-	"if":     IF,
-	"else":   ELSE,
-	"return": RETURN,
+	"fn":     Function,
+	"let":    Let,
+	"true":   True,
+	"false":  False,
+	"if":     If,
+	"else":   Else,
+	"return": Return,
 }
 
 func LookupIdent(ident string) Type {
 	if tok, ok := keywords[ident]; ok {
 		return tok
 	}
-	return IDENT
+	return Ident
 }
