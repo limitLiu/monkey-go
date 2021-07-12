@@ -52,7 +52,7 @@ func (es *ExpressionStatement) statementNode()       {}
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 func (es *ExpressionStatement) String() string {
 	var out bytes.Buffer
-	out.WriteString(es.TokenLiteral() + "")
+	out.WriteString(es.TokenLiteral() + " ")
 	if es.Expression != nil {
 		return es.Expression.String()
 	}
@@ -186,7 +186,7 @@ func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
 func (rs *ReturnStatement) String() string {
 	var out bytes.Buffer
-	out.WriteString(rs.TokenLiteral() + "")
+	out.WriteString(rs.TokenLiteral() + " ")
 	if rs.ReturnValue != nil {
 		out.WriteString(rs.ReturnValue.String())
 	}
